@@ -4,17 +4,18 @@ const app = express();
 const { connectDatabase } = require("./database/dabasase");
 const Blog = require("./model/blogModel");
 
+
+app.set('view engine', 'ejs')
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 connectDatabase()
 
+app.use(express.static("public"))
+
 //GET API
 app.get("/", (req, res) => {
-    res.json({
-        status : 200,
-        message : "Success"
-    })
+    res.render('home.ejs')
 })
 
 
@@ -44,13 +45,22 @@ app.get("/blogs/:id", async (req, res) => {
 
     const id = req.params.id
 
-    const daata = await Blog.findById(id)
+    const blog = await Blog.findById(id)
 
+
+    if(blog){
     res.json({
         status: 200,
         message : "successfull",
-        data : daata
+        data : blog
     })
+    }else{
+        res.json({
+            status : 404,
+            message : "Data could not be found"
+            
+        })
+    }
 })
 
 
