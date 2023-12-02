@@ -23,12 +23,36 @@ app.get("/blogs", async (req, res) => {
 
     const blogs = await Blog.find()
 
-    res.json({
+    if(blogs.length == 0) {
+        res.json({
+            status : 404,
+            message : "Empty Blogs"
+        })
+
+    } else {
+
+        res.json({
         status : 200,
-        message : "All Blogs",
+        message : "All Blogss",
         data : blogs
     })
+    }    
 })
+
+
+app.get("/blogs/:id", async (req, res) => {
+
+    const id = req.params.id
+
+    const daata = await Blog.findById(id)
+
+    res.json({
+        status: 200,
+        message : "successfull",
+        data : daata
+    })
+})
+
 
 
 //CREATE BLOG API
@@ -41,14 +65,11 @@ app.post("/createBlog", async (req, res) => {
         description : req.body.description
     })
 
-
-
     res.json({
         status : 200,
         message : "Blog created successfully"
     })
 })
-
 
 app.listen(3000, () => {
     console.log("Server started on port 3000..")
