@@ -40,7 +40,7 @@ app.get("/blogs", async (req, res) => {
     }    
 })
 
-
+//GET API => /blogs (Single blog)
 app.get("/blogs/:id", async (req, res) => {
 
     const id = req.params.id
@@ -65,7 +65,7 @@ app.get("/blogs/:id", async (req, res) => {
 
 
 
-//CREATE BLOG API
+//CREATE BLOG API  
 app.post("/createBlog", async (req, res) => {
     console.log(req.body)
 
@@ -78,6 +78,37 @@ app.post("/createBlog", async (req, res) => {
     res.json({
         status : 200,
         message : "Blog created successfully"
+    })
+})
+
+//UPDATE BLOG API 
+app.patch("/blogs/:id", async (req, res) => {
+    const id = req.params.id
+    const title = req.body.title
+    const subTitle = req.body.subTitle
+    const description = req.body.description
+
+   await Blog.findByIdAndUpdate(id, {
+        title : title,
+        subTitle : subTitle,
+        description : description
+   })
+     
+   res.status(200).json({
+    message : "Blog upadted Successfully"
+   })
+
+})
+
+//DELETE BLOG API
+app.delete("/blogs/:id", async (req, res) => {
+    const id = req.params.id
+
+
+    await Blog.findByIdAndDelete(id)
+
+    res.status(200).json({
+        message : "Blog Deleted Successfully"
     })
 })
 
